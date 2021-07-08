@@ -1,5 +1,8 @@
 import css from 'dom-css';
-let scrollbarWidth = false;
+
+const DEFAULT_WIDTH = 15;
+
+let scrollbarWidth = DEFAULT_WIDTH;
 
 export default function getScrollbarWidth() {
     if (scrollbarWidth !== false) return scrollbarWidth;
