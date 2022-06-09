@@ -147,37 +147,37 @@ export default class Scrollbars extends Component {
     }
 
     getThumbHorizontalWidth() {
+        if (!this.view) return 0;
         const { thumbSize, thumbMinSize } = this.props;
-        const { scrollWidth, clientWidth } = this.view;
         const trackWidth = getInnerWidth(this.trackHorizontal);
-        const width = Math.ceil(clientWidth / scrollWidth * trackWidth);
+        const width = Math.ceil(this.view.clientWidth / this.view.scrollWidth * trackWidth);
         if (trackWidth === width) return 0;
         if (thumbSize) return thumbSize;
         return Math.max(width, thumbMinSize);
     }
 
     getThumbVerticalHeight() {
+        if (!this.view) return 0;
         const { thumbSize, thumbMinSize } = this.props;
-        const { scrollHeight, clientHeight } = this.view;
         const trackHeight = getInnerHeight(this.trackVertical);
-        const height = Math.ceil(clientHeight / scrollHeight * trackHeight);
+        const height = Math.ceil(this.view.clientHeight / this.view.scrollHeight * trackHeight);
         if (trackHeight === height) return 0;
         if (thumbSize) return thumbSize;
         return Math.max(height, thumbMinSize);
     }
 
     getScrollLeftForOffset(offset) {
-        const { scrollWidth, clientWidth } = this.view;
+        if (!this.view) return 0;
         const trackWidth = getInnerWidth(this.trackHorizontal);
         const thumbWidth = this.getThumbHorizontalWidth();
-        return offset / (trackWidth - thumbWidth) * (scrollWidth - clientWidth);
+        return offset / (trackWidth - thumbWidth) * (this.view.scrollWidth - this.view.clientWidth);
     }
 
     getScrollTopForOffset(offset) {
-        const { scrollHeight, clientHeight } = this.view;
+        if (!this.view) return 0;
         const trackHeight = getInnerHeight(this.trackVertical);
         const thumbHeight = this.getThumbVerticalHeight();
-        return offset / (trackHeight - thumbHeight) * (scrollHeight - clientHeight);
+        return offset / (trackHeight - thumbHeight) * (this.view.scrollHeight - this.view.clientHeight);
     }
 
     scrollLeft(left = 0) {
@@ -399,8 +399,8 @@ export default class Scrollbars extends Component {
 
     showTracks() {
         clearTimeout(this.hideTracksTimeout);
-        css(this.trackHorizontal, { opacity: 1 });
-        css(this.trackVertical, { opacity: 1 });
+        if (this.trackHorizontal) css(this.trackHorizontal, { opacity: 1 });
+        if (this.trackVertical) css(this.trackVertical, { opacity: 1 });
     }
 
     hideTracks() {
@@ -470,8 +470,8 @@ export default class Scrollbars extends Component {
                 const trackVerticalStyle = {
                     visibility: scrollHeight > clientHeight ? 'visible' : 'hidden'
                 };
-                css(this.trackHorizontal, trackHorizontalStyle);
-                css(this.trackVertical, trackVerticalStyle);
+                if (this.trackHorizontal) css(this.trackHorizontal, trackHorizontalStyle);
+                if (this.trackVertical) css(this.trackVertical, trackVerticalStyle);
             }
             css(this.thumbHorizontal, thumbHorizontalStyle);
             css(this.thumbVertical, thumbVerticalStyle);
