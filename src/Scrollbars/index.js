@@ -343,7 +343,7 @@ export default class Scrollbars extends Component {
     }
 
     handleDrag(event) {
-        if (this.prevPageX) {
+        if (this.prevPageX && this.trackHorizontal) {
             const { clientX } = event;
             const { left: trackLeft } = this.trackHorizontal.getBoundingClientRect();
             const thumbWidth = this.getThumbHorizontalWidth();
@@ -351,7 +351,7 @@ export default class Scrollbars extends Component {
             const offset = -trackLeft + clientX - clickPosition;
             this.view.scrollLeft = this.getScrollLeftForOffset(offset);
         }
-        if (this.prevPageY) {
+        if (this.prevPageY && this.trackVertical) {
             const { clientY } = event;
             const { top: trackTop } = this.trackVertical.getBoundingClientRect();
             const thumbHeight = this.getThumbVerticalHeight();
@@ -410,8 +410,8 @@ export default class Scrollbars extends Component {
         const { autoHideTimeout } = this.props;
         clearTimeout(this.hideTracksTimeout);
         this.hideTracksTimeout = setTimeout(() => {
-            css(this.trackHorizontal, { opacity: 0 });
-            css(this.trackVertical, { opacity: 0 });
+            if (this.trackHorizontal) css(this.trackHorizontal, { opacity: 0 });
+            if (this.trackVertical) css(this.trackVertical, { opacity: 0 });
         }, autoHideTimeout);
     }
 
@@ -473,8 +473,8 @@ export default class Scrollbars extends Component {
                 if (this.trackHorizontal) css(this.trackHorizontal, trackHorizontalStyle);
                 if (this.trackVertical) css(this.trackVertical, trackVerticalStyle);
             }
-            css(this.thumbHorizontal, thumbHorizontalStyle);
-            css(this.thumbVertical, thumbVerticalStyle);
+            if (this.thumbHorizontal) css(this.thumbHorizontal, thumbHorizontalStyle);
+            if (this.thumbVertical) css(this.thumbVertical, thumbVerticalStyle);
         }
         if (onUpdate) onUpdate(values);
         if (typeof callback !== 'function') return;
